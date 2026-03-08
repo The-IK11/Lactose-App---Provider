@@ -1,18 +1,28 @@
-
-
-
+import 'dart:async';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lactos_app_with_provider/provider/counter_provider.dart';
 import 'package:provider/provider.dart';
 
-class CounterScreen extends StatelessWidget {
-  const CounterScreen({super.key});
+class TimerCounterScreen extends StatefulWidget {
+  const TimerCounterScreen({super.key});
 
+  @override
+  State<TimerCounterScreen> createState() => _TimerCounterScreenState();
+}
 
+class _TimerCounterScreenState extends State<TimerCounterScreen> {
+ 
+   @override
+   void initState() {
+    super.initState();
+    
+    Timer.periodic(Duration(seconds: 1), (timer){
+      context.read<CounterProvider>().incrementCouneter();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

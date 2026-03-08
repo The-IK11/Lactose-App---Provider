@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lactos_app_with_provider/presentation/counter_screen.dart';
+import 'package:lactos_app_with_provider/presentation/timer_counter_screen.dart';
+import 'package:lactos_app_with_provider/provider/counter_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,14 +21,18 @@ class MyApp extends StatelessWidget {
       splitScreenMode: true,
       // Use builder only if you need to use library outside ScreenUtilInit context
       builder: (_ , child) {
-        return  MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Lactos App with Provider',
-      theme: ThemeData(
-       
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home:  CounterScreen(),
-    );});
+        return  ChangeNotifierProvider(
+          create: (_) => CounterProvider(),
+
+          child: MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: 'Lactos App with Provider',
+                theme: ThemeData(
+                 
+          colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+                ),
+                home:  const TimerCounterScreen(),
+              ),
+        );});
   }
 }
