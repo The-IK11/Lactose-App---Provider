@@ -15,13 +15,22 @@ class TimerCounterScreen extends StatefulWidget {
 
 class _TimerCounterScreenState extends State<TimerCounterScreen> {
  
+  Timer? _timer;
+
    @override
    void initState() {
     super.initState();
     
-    Timer.periodic(Duration(seconds: 1), (timer){
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer){
+      if (!mounted) return;
       context.read<CounterProvider>().incrementCouneter();
     });
+  }
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+    
   }
 
   @override
