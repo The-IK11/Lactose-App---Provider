@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lactos_app_with_provider/presentation/counter_screen.dart';
+import 'package:lactos_app_with_provider/presentation/slider_progress_indicator.dart';
 import 'package:lactos_app_with_provider/provider/counter_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
                  
           colorScheme: .fromSeed(seedColor: Colors.deepPurple),
                 ),
-                home:  CounterScreen(),
+                home:  SliderScreen(),
               ),
         );});
   }
