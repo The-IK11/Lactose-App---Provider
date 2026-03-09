@@ -9,11 +9,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lactos_app_with_provider/provider/counter_provider.dart';
 import 'package:provider/provider.dart';
 
-class CounterScreen extends StatelessWidget {
+class CounterScreen extends StatefulWidget {
   const CounterScreen({super.key});
 
+  @override
+  State<CounterScreen> createState() => _CounterScreenState();
+}
 
-
+class _CounterScreenState extends State<CounterScreen> {
   @override
   Widget build(BuildContext context) {
     log("CounterScreen build method called");
