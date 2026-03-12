@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 class FavouriteCard extends StatelessWidget {
   final FavoriteItem item;
 
-  const FavouriteCard({required this.item});
+  const FavouriteCard({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
