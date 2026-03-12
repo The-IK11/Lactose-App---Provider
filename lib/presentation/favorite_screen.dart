@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -97,9 +99,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
        'cat5': 'Reading',
      };
 
-     return StatefulBuilder(
-       builder: (context, setDialogState) {
-         return AlertDialog(
+  return AlertDialog(
            title: const Text('Add to favorites'),
            content: Column(
              mainAxisSize: MainAxisSize.min,
@@ -128,19 +128,23 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                    color: Colors.blueGrey[50],
                    onSelected: (value) {
                      // use the dialog-local setState to update the UI inside the dialog
-                     setDialogState(() {
-                       selectedCategory = value;
-                     });
+                    //  setDialogState(() {
+                    //    selectedCategory = value;
+                    //  });
+                context.read<FavoriteProvider>().setCategory(value);
                    },
                    child: Row(
                      mainAxisSize: MainAxisSize.min,
                      children: [
-                       Text(
-                         selectedCategory == null
-                             ? 'Select category'
-                             : (categoryLabels[selectedCategory] ?? 'Select category'),
-                         style: GoogleFonts.poppins(fontSize: 14.sp),
-                       ),
+                      Consumer<FavoriteProvider>(
+                        builder: (context,favoriteProvider,child){
+                          return Text(
+                         (categoryLabels[favoriteProvider.selectedCategory] ?? 'Select category'),
+                         style: GoogleFonts.poppins(fontSize: 14.sp)
+                       );
+                        },
+                      ),
+                       
                        const Icon(Icons.arrow_drop_down_rounded),
                      ],
                    ),
@@ -153,14 +157,23 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
              ElevatedButton(
                onPressed: () {
                  // Return the entered values to the caller; do not alter provider here per request
-                 Navigator.pop(context, {'name': itemName, 'category': selectedCategory});
+                 Navigator.pop(context);
+
+                  if (itemName != null && selectedCategory != null) {
+                    final newItem = FavoriteItem(
+                      id: DateTime.now().millisecondsSinceEpoch.toString(),
+                      title: itemName!,
+                      subtitle: categoryLabels[selectedCategory!] ?? 'Unknown',
+                      icon: getIconForCategory(categoryLabels[selectedCategory!] ?? 'Unknown'),
+                    );
+                    context.read<FavoriteProvider>().addItem(newItem);
+                  }
                },
                child: const Text('Add'),
              ),
            ],
          );
-       },
-     );
+       
    });
  }
 }

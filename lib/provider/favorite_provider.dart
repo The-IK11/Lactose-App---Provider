@@ -16,38 +16,42 @@ class FavoriteItem {
 
 class FavoriteProvider with ChangeNotifier {
   final List<FavoriteItem> _items = [
-    const FavoriteItem(
+   FavoriteItem(
       id: '1',
       title: 'Morning Run',
       subtitle: 'Health & Fitness',
-      icon: Icons.directions_run_rounded,
+      icon: getIconForCategory('Health & Fitness'),
     ),
-    const FavoriteItem(
+ FavoriteItem(
       id: '2',
       title: 'Flutter Docs',
       subtitle: 'Development',
-      icon: Icons.code_rounded,
+      icon: getIconForCategory( 'Development'),
     ),
-    const FavoriteItem(
+ FavoriteItem(
       id: '3',
       title: 'Chill Playlist',
       subtitle: 'Music',
-      icon: Icons.music_note_rounded,
+      icon: getIconForCategory('Music'),
     ),
-    const FavoriteItem(
+ FavoriteItem(
       id: '4',
       title: 'Travel Plans',
       subtitle: 'Lifestyle',
-      icon: Icons.flight_rounded,
+      icon: getIconForCategory('Lifestyle'),
     ),
-    const FavoriteItem(
+   FavoriteItem(
       id: '5',
       title: 'Book List',
       subtitle: 'Reading',
-      icon: Icons.menu_book_rounded,
+      icon: getIconForCategory('Reading'),
     ),
   ];
+   String  ?  _selectedCategory;
 
+
+
+   String get selectedCategory => _selectedCategory ?? '';
   List<FavoriteItem> get items => List.unmodifiable(_items);
 
   bool isFavorite(String id) => _items.any((item) => item.id == id);
@@ -55,5 +59,33 @@ class FavoriteProvider with ChangeNotifier {
   void removeItem(String id) {
     _items.removeWhere((item) => item.id == id);
     notifyListeners();
+  }
+
+void addItem(FavoriteItem item){
+  _items.add(item);
+  notifyListeners();
+}
+
+void setCategory(String category){
+  _selectedCategory = category;
+   notifyListeners();
+
+}}
+
+IconData getIconForCategory(String category){
+
+  switch(category){
+    case 'Health & Fitness':
+      return Icons.directions_run_rounded;
+    case 'Development':
+      return Icons.code_rounded;
+    case 'Music':
+      return Icons.music_note_rounded;
+    case 'Lifestyle':
+      return Icons.flight_rounded;
+    case 'Reading':
+      return Icons.menu_book_rounded;
+    default:
+      return Icons.star_rounded; // default icon for unknown categories
   }
 }
