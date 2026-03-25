@@ -16,6 +16,17 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
+
+ late FavoriteProvider favoriteProvider;
+
+ //@override
+  void initState() {
+    // TODO: implement initState
+  super.initState();
+   favoriteProvider = Provider.of<FavoriteProvider>(context,listen: false);
+  }
+ 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,7 +98,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
  Future<dynamic> showAddFavoriteDialog(BuildContext context) {
    // We'll maintain the dialog-local state (selected category + name)
    return showDialog(context: context, builder: (context) {
-     String? selectedCategory;
+    
      String? itemName;
 
      // mapping for labels shown in the dialog
@@ -157,17 +168,18 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
              ElevatedButton(
                onPressed: () {
                  // Return the entered values to the caller; do not alter provider here per request
-                 Navigator.pop(context);
+                 
 
-                  if (itemName != null && selectedCategory != null) {
+                  if (itemName != null && favoriteProvider.selectedCategory != null) {
                     final newItem = FavoriteItem(
                       id: DateTime.now().millisecondsSinceEpoch.toString(),
                       title: itemName!,
-                      subtitle: categoryLabels[selectedCategory!] ?? 'Unknown',
-                      icon: getIconForCategory(categoryLabels[selectedCategory!] ?? 'Unknown'),
+                      subtitle: categoryLabels[favoriteProvider.selectedCategory!] ?? 'Unknown',
+                      icon: getIconForCategory(categoryLabels[favoriteProvider.selectedCategory!] ?? 'Unknown'),
                     );
                     context.read<FavoriteProvider>().addItem(newItem);
                   }
+                  Navigator.pop(context);
                },
                child: const Text('Add'),
              ),
