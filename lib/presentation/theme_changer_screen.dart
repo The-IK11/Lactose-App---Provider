@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lactos_app_with_provider/provider/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class ThemeChangerScreen extends StatelessWidget {
   const ThemeChangerScreen({super.key});
@@ -23,30 +25,58 @@ class ThemeChangerScreen extends StatelessWidget {
             Text('Appearance', style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600)),
             const SizedBox(height: 12),
 
-            // Simple option list (visual only)
-            Card(
-              child: Column(
-                children: const [
-                  ListTile(
-                    leading: Icon(Icons.wb_sunny_rounded),
-                    title: Text('Light'),
-                    subtitle: Text('Bright and clean'),
-                    trailing: Icon(Icons.radio_button_unchecked),
+            // Consumer widget for reactive theme selection
+            Consumer<ThemeProvider>(
+              builder: (context, themeProvider, child) {
+                return Card(
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.wb_sunny_rounded),
+                        title: const Text('Light'),
+                        subtitle: const Text('Bright and clean'),
+                        trailing: Radio<ThemeMode>(
+                          value: ThemeMode.light,
+                          groupValue: themeProvider.themeMode,
+                          onChanged: (value) {
+                            if (value != null) {
+                              themeProvider.toggleTheme(value);
+                            }
+                          },
+                        ),
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.nights_stay_rounded),
+                        title: const Text('Dark'),
+                        subtitle: const Text('Easy on the eyes'),
+                        trailing: Radio<ThemeMode>(
+                          value: ThemeMode.dark,
+                          groupValue: themeProvider.themeMode,
+                          onChanged: (value) {
+                            if (value != null) {
+                              themeProvider.toggleTheme(value);
+                            }
+                          },
+                        ),
+                      ),
+                      ListTile(
+                        leading: const Icon(Icons.smartphone_rounded),
+                        title: const Text('System'),
+                        subtitle: const Text('Follow device settings'),
+                        trailing: Radio<ThemeMode>(
+                          value: ThemeMode.system,
+                          groupValue: themeProvider.themeMode,
+                          onChanged: (value) {
+                            if (value != null) {
+                              themeProvider.toggleTheme(value);
+                            }
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  ListTile(
-                    leading: Icon(Icons.nights_stay_rounded),
-                    title: Text('Dark'),
-                    subtitle: Text('Easy on the eyes'),
-                    trailing: Icon(Icons.radio_button_unchecked),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.smartphone_rounded),
-                    title: Text('System'),
-                    subtitle: Text('Follow device settings'),
-                    trailing: Icon(Icons.radio_button_checked),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
 
             const SizedBox(height: 18),
@@ -76,6 +106,7 @@ class ThemeChangerScreen extends StatelessWidget {
       ),
     );
   }
+
 }
 
 class _SimpleSwatch extends StatelessWidget {

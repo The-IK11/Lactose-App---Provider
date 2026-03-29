@@ -7,6 +7,7 @@ import 'package:lactos_app_with_provider/presentation/theme_changer_screen.dart'
 import 'package:lactos_app_with_provider/provider/counter_provider.dart';
 import 'package:lactos_app_with_provider/provider/favorite_provider.dart';
 import 'package:lactos_app_with_provider/provider/slider_provider.dart';
+import 'package:lactos_app_with_provider/provider/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -31,16 +32,33 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(create: (_) => CounterProvider()),
             ChangeNotifierProvider(create: (_) => SliderProvider()),
             ChangeNotifierProvider(create: (_) => FavoriteProvider()),
+            ChangeNotifierProvider(create: (_) => ThemeProvider()),
           ],
-          child: MaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: 'Lactos App with Provider',
-                theme: ThemeData(
-                 
-          colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-                ),
-                home: const ThemeChangerScreen(),
-              ),
+          child: Builder(
+            builder: (BuildContext context) {
+
+              final themeProvider = Provider.of<ThemeProvider>(context);
+      return     MaterialApp(
+                  debugShowCheckedModeBanner: false,
+                  title: 'Lactos App with Provider',
+                  themeMode: themeProvider.themeMode,
+                  darkTheme: ThemeData(
+                    brightness: Brightness.dark,
+                    colorScheme: ColorScheme.fromSeed(
+                      seedColor: Colors.deepPurple,
+                      brightness: Brightness.dark,
+                    ),
+                  ),
+                  theme: ThemeData(
+                    brightness: Brightness.light,
+                    colorScheme: ColorScheme.fromSeed(
+                      seedColor: Colors.deepPurple,
+                      brightness: Brightness.light,
+                    ),
+                  ),
+                  home: const ThemeChangerScreen(),
+                );}
+          ),
         );});
   }
 }
