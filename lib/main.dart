@@ -4,6 +4,7 @@ import 'package:lactos_app_with_provider/presentation/counter_screen.dart';
 import 'package:lactos_app_with_provider/presentation/favorite_screen.dart';
 import 'package:lactos_app_with_provider/presentation/slider_progress_indicator.dart';
 import 'package:lactos_app_with_provider/presentation/theme_changer_screen.dart';
+import 'package:lactos_app_with_provider/presentation/valulistenable_screen.dart';
 import 'package:lactos_app_with_provider/provider/counter_provider.dart';
 import 'package:lactos_app_with_provider/provider/favorite_provider.dart';
 import 'package:lactos_app_with_provider/provider/slider_provider.dart';
@@ -58,7 +59,8 @@ class MyApp extends StatelessWidget {
                       brightness: Brightness.light,
                     ),
                   ),
-                  home: const ThemeChangerScreen(),
+                  home:  ValulistenableScreen(),
+
                 );}
           ),
         );});
