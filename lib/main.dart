@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lactos_app_with_provider/presentation/counter_screen.dart';
 import 'package:lactos_app_with_provider/presentation/favorite_screen.dart';
+import 'package:lactos_app_with_provider/presentation/sign_in_screen.dart';
 import 'package:lactos_app_with_provider/presentation/slider_progress_indicator.dart';
 import 'package:lactos_app_with_provider/presentation/theme_changer_screen.dart';
 import 'package:lactos_app_with_provider/presentation/valulistenable_screen.dart';
@@ -59,7 +60,7 @@ class MyApp extends StatelessWidget {
                       brightness: Brightness.light,
                     ),
                   ),
-                  home:  ValulistenableScreen(),
+                  home:  SignInScreen(),
 
                 );}
           ),
