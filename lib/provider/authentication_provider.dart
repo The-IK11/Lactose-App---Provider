@@ -27,11 +27,14 @@ class AuthenticationProvider extends ChangeNotifier {
 
     try {
       final response = await http.post(
-        Uri.parse("$_baseUrl$_loginEndpoint"),  
-        body: {
-          "email": email,
-          "password": password,
-        },
+        Uri.parse("$_baseUrl$_loginEndpoint"),  headers: {
+  "x-api-key": "reqres_21529bcb681a4fc5be5c3dc61aa4e02e",
+  "Content-Type": "application/json"
+},// Put your k
+        body: jsonEncode({
+        "email": email,
+        "password": password,
+      }),
       );
 
       if (response.statusCode == 200) {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lactos_app_with_provider/provider/authentication_provider.dart';
+import 'package:provider/provider.dart';
 
 class SignInScreen extends StatefulWidget {
 	const SignInScreen({super.key});
@@ -13,12 +15,35 @@ class _SignInScreenState extends State<SignInScreen> {
 	final _passwordController = TextEditingController();
 	bool _obscure = true;
 	bool _remember = false;
+	bool _dialogShown = false;  // ✅ track if dialog is already shown
 
 	@override
 	void dispose() {
 		_emailController.dispose();
 		_passwordController.dispose();
 		super.dispose();
+	}
+
+	void _showLoadingDialog() {
+		showDialog(
+			context: context,
+			barrierDismissible: false,
+			builder: (ctx) => AlertDialog(
+				content: Row(
+					children: [
+						const CircularProgressIndicator(),
+						const SizedBox(width: 16),
+						Text('Signing in...', style: GoogleFonts.poppins()),
+					],
+				),
+			),
+		);
+	}
+
+	void _hideLoadingDialog() {
+		if (Navigator.of(context).canPop()) {
+			Navigator.of(context).pop();
+		}
 	}
 
 	void _showNotImplemented() {
@@ -31,7 +56,6 @@ class _SignInScreenState extends State<SignInScreen> {
 	Widget build(BuildContext context) {
 		final colorScheme = Theme.of(context).colorScheme;
 		final w = MediaQuery.of(context).size.width;
-
 		return Scaffold(
 			body: SafeArea(
 				child: Center(
@@ -118,14 +142,60 @@ class _SignInScreenState extends State<SignInScreen> {
 
 									const SizedBox(height: 16),
 
-									// Sign in button
-									SizedBox(
-										height: 48,
-										child: ElevatedButton(
-											onPressed: _showNotImplemented,
-											style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
-											child: Text('Sign in', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600)),
-										),
+									// Sign in button with loading state
+									Consumer<AuthenticationProvider>(
+										builder: (context, authProvider, child) {
+											// Show loading dialog only once when isLoading becomes true
+											if (authProvider.isLoading && !_dialogShown) {
+												_dialogShown = true;
+												WidgetsBinding.instance.addPostFrameCallback((_) {
+													_showLoadingDialog();
+												});
+											}
+
+											// Hide loading dialog and show error if needed
+											if (!authProvider.isLoading && _dialogShown) {
+												_dialogShown = false;
+												WidgetsBinding.instance.addPostFrameCallback((_) {
+													_hideLoadingDialog();
+													if (authProvider.errorMessage != null) {
+														ScaffoldMessenger.of(context).showSnackBar(
+															SnackBar(
+																content: Text(authProvider.errorMessage ?? 'Error occurred'),
+																backgroundColor: Colors.red,
+															),
+														);
+													} else if (authProvider.token != null) {
+												
+														ScaffoldMessenger.of(context).showSnackBar(
+															SnackBar(
+																content: Text('Login successful!', style: GoogleFonts.poppins()),
+																backgroundColor: Colors.green,
+															),
+														);
+													}
+												});
+											}
+
+											return SizedBox(
+												height: 48,
+												child: ElevatedButton(
+													onPressed: authProvider.isLoading
+														? null
+														: () {
+															if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+																ScaffoldMessenger.of(context).showSnackBar(
+																	const SnackBar(content: Text('Please fill all fields')),
+																);
+																return;
+															}
+															authProvider.signIn(_emailController.text, _passwordController.text);
+														},
+													style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+													child: Text('Sign in', style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600)),
+												),
+											);
+										},
 									),
 
 									const SizedBox(height: 14),

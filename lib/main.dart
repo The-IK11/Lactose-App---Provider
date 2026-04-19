@@ -6,6 +6,7 @@ import 'package:lactos_app_with_provider/presentation/sign_in_screen.dart';
 import 'package:lactos_app_with_provider/presentation/slider_progress_indicator.dart';
 import 'package:lactos_app_with_provider/presentation/theme_changer_screen.dart';
 import 'package:lactos_app_with_provider/presentation/valulistenable_screen.dart';
+import 'package:lactos_app_with_provider/provider/authentication_provider.dart';
 import 'package:lactos_app_with_provider/provider/counter_provider.dart';
 import 'package:lactos_app_with_provider/provider/favorite_provider.dart';
 import 'package:lactos_app_with_provider/provider/slider_provider.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(create: (_) => SliderProvider()),
             ChangeNotifierProvider(create: (_) => FavoriteProvider()),
             ChangeNotifierProvider(create: (_) => ThemeProvider()),
+            ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
           ],
           child: Builder(
             builder: (BuildContext context) {
